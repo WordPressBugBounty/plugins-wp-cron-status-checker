@@ -5,7 +5,7 @@ Tags: cron, scheduled posts, wp-cron, woocommerce, logging, plugin updates, subs
 Requires at least: 4.0
 Requires PHP: 5.6
 Tested up to: 6.7
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,9 @@ That person reinstalled cURL and restarted PHP to resolve the issue.
 6. The WP-Cron Status Checker showing a failed job.
 
 == Changelog ==
+
+= 1.2.7 =
+updated freemius SDK. 
 
 = 1.2.6 =
 updated freemius SDK. 
