@@ -562,7 +562,7 @@ class WCSC {
     public static function blogtime_to_utc( $datetime_string = 'now', $type = 'mysql' ) {
         try {
             // get datetime object from site timezone
-            $datetime = new DateTime($datetime_string, new DateTimeZone(prptb_get_timezone_string()));
+            $datetime = new DateTime($datetime_string, new DateTimeZone(get_timezone_string()));
             $datetime->setTimezone( new DateTimeZone('UTC') );
             if ( $type == 'mysql' ) {
                 return $datetime->format( 'Y-m-d H:i:s' );
@@ -585,17 +585,19 @@ class WCSC {
      */
     public static function get_timezone_string() {
         // if site timezone string exists, return it
-        if ( $timezone = get_option( 'timezone_string' ) ) {
+        $timezone = get_option( 'timezone_string' );
+        if ( !empty( $timezone ) ) {
             return $timezone;
         }
         // get UTC offset, if it isn't set then return UTC
-        if ( 0 === ($utc_offset = get_option( 'gmt_offset', 0 )) ) {
+        $utc_offset = get_option( 'gmt_offset', 0 );
+        if ( 0 === $utc_offset ) {
             return 'UTC';
         }
         // adjust UTC offset from hours to seconds
         $utc_offset *= 3600;
         // attempt to guess the timezone string from the UTC offset
-        $timezone = timezone_name_from_abbr( '', $utc_offset );
+        $timezone = timezone_name_from_abbr( '', $utc_offset, 0 );
         // last try, guess timezone string manually
         if ( false === $timezone ) {
             $is_dst = date( 'I' );
@@ -606,9 +608,10 @@ class WCSC {
                     }
                 }
             }
+            // fallback to UTC
+            return 'UTC';
         }
-        // fallback to UTC
-        return 'UTC';
+        return $timezone;
     }
 
     /**

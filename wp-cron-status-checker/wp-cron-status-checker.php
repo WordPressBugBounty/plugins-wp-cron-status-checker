@@ -4,10 +4,10 @@
 Plugin Name: WP-Cron Status Checker
 Plugin URI: https://webheadcoder.com/wp-cron-status-checker
 Description: If WP-Cron runs important things for you, you better make sure WP-Cron always runs!
-Version: 1.2.7
+Version: 1.2.8
 Author: Webhead LLC
 */
-define( 'WCSC_VERSION', '1.2.7' );
+define( 'WCSC_VERSION', '1.2.8' );
 define( 'WCSC_PLUGIN', __FILE__ );
 define( 'WCSC_DIR', dirname( WCSC_PLUGIN ) );
 define( 'WCSC_OPTIONS_NAME', 'wcsc_options' );

@@ -84,13 +84,21 @@ function wcsc_test_cron_spawn() {
 
 if ( defined( 'DOING_CRON' ) && DOING_CRON ) :
 
+    if ( defined( 'WP_CLI' ) && WP_CLI ) {
+        global $wcsc_doing_cron_key;
+
+        $wcsc_doing_cron_key = sprintf( '%.22F', microtime( true ) );
+    }
+
     /**
      * Set the time for wcsc_last_run.
      */
     function wcsc_monitor_runs() {
         global $wcsc_doing_cron_key;
         
-        $wcsc_doing_cron_key = get_transient( 'doing_cron' );
+        if ( empty( $wcsc_doing_cron_key ) ) {
+            $wcsc_doing_cron_key = get_transient( 'doing_cron' );
+        }
 
         if ( empty ( $wcsc_doing_cron_key ) ) {
             // shouldn't get here
@@ -169,7 +177,10 @@ if ( defined( 'DOING_CRON' ) && DOING_CRON ) :
             return;
         }
 
-        $wcsc_doing_cron_key = get_transient( 'doing_cron' );
+        if ( empty( $wcsc_doing_cron_key ) ) {
+            $wcsc_doing_cron_key = get_transient( 'doing_cron' );
+        }
+
         if ( !empty( $wcsc_doing_cron_key ) ) {
             // transient is already set, lets go!
             wcsc_monitor_runs();
@@ -279,33 +290,33 @@ if ( defined( 'WCSC_DEBUG_CRON_EVENT' ) && WCSC_DEBUG_CRON_EVENT ) :
     /**
      * schedules the event on activation
      */
-    function wcsc_thirty_seconds_activation() {
+    function wcsc_sixty_seconds_activation() {
         if (! wp_next_scheduled ( 'wcsc_debug_event' )) {
-            wp_schedule_event( time(), 'thirty_seconds', 'wcsc_debug_event' );
+            wp_schedule_event( time(), 'sixty_seconds', 'wcsc_debug_event' );
         }
     }
-    register_activation_hook( WCSC_PLUGIN, 'wcsc_thirty_seconds_activation' );
+    register_activation_hook( WCSC_PLUGIN, 'wcsc_sixty_seconds_activation' );
 
     /**
      * unschedules the event on activation
      */
-    function wcsc_thirty_seconds_deactivation() {
+    function wcsc_sixty_seconds_deactivation() {
             wp_clear_scheduled_hook( 'wcsc_debug_event' );
     }
-    register_deactivation_hook( WCSC_PLUGIN, 'wcsc_thirty_seconds_deactivation' );
+    register_deactivation_hook( WCSC_PLUGIN, 'wcsc_sixty_seconds_deactivation' );
 
     /**
      * for debug, sets up a job running every 30 seconds.
      */
-    function wcsc_add_thirty_seconds( $schedules ) {
-        // add a 'wcsc_add_thirty_seconds' schedule to the existing set
-        $schedules['thirty_seconds'] = array(
-            'interval' => 30,
-            'display' => __('Once Every 30 Seconds')
+    function wcsc_add_sixty_seconds( $schedules ) {
+        // add a 'wcsc_add_sixty_seconds' schedule to the existing set
+        $schedules['sixty_seconds'] = array(
+            'interval' => 60,
+            'display' => __('Once Every 60 Seconds')
         );
         return $schedules;
     }
-    add_filter( 'cron_schedules', 'wcsc_add_thirty_seconds' );
+    add_filter( 'cron_schedules', 'wcsc_add_sixty_seconds' );
 
     /**
      * debug job to be run
@@ -313,7 +324,7 @@ if ( defined( 'WCSC_DEBUG_CRON_EVENT' ) && WCSC_DEBUG_CRON_EVENT ) :
     function wcsc_debug_cron() {
         // global $wpdb;
         do_action( 'wp_log_debug', 'wcsc_debug_cron', 1 );
-        $wpdb->hello();
+        // $wpdb->hello();
         do_action( 'wp_log_debug', 'wcsc_debug_cron2', 'results' );
     }
     add_action( 'wcsc_debug_event', 'wcsc_debug_cron', 99 );
