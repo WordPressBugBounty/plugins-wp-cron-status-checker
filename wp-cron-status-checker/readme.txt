@@ -1,10 +1,10 @@
 === WP-Cron Status Checker ===
 Contributors: webheadllc
 Donate Link: https://webheadcoder.com/donate-wp-cron-status-checker
-Tags: cron, scheduled posts, wp-cron, woocommerce, logging, plugin updates, subscription, recurring, daily, weekly, monthly, billing, status, check, notify
+Tags: cron, scheduled, logging, check, notify
 Requires at least: 4.0
 Requires PHP: 5.6
-Tested up to: 6.7
+Tested up to: 6.9
 Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
